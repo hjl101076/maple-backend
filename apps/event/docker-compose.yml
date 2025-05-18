@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo
+    container_name: maple-mongo
+    ports:
+      - '27017:27017'
+    volumes:
+      - ./data:/data/db
+
+  event:
+    build: ./apps/event
+    container_name: maple-event
+    ports:
+      - '3002:3002'
+    env_file:
+      - ./apps/event/.env
+    depends_on:
+      - mongo
