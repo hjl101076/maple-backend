@@ -19,21 +19,25 @@ import {
 import { JwtAuthGuard } from '../../../../common/guards/jwt-auth.guard';
 
 @ApiTags('Reward Requests')
-@UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @Controller('reward-requests')
 export class RewardRequestsController {
   constructor(private readonly service: RewardRequestsService) {}
 
   @Post()
-  @ApiOperation({ summary: '유저 보상 요청' })
+  @ApiOperation({ summary: '유저 보상 요청 (USER만 가능)' })
   async create(@Body() dto: CreateRewardRequestDto, @Request() req) {
+    if (req.user.role !== 'USER') {
+      throw new ForbiddenException('일반 유저만 보상을 요청할 수 있습니다.');
+    }
+
     const userEmail = req.user.email;
     return this.service.create(dto, userEmail);
   }
 
   @Get()
-  @ApiOperation({ summary: '전체 보상 요청 조회 (권한자만)' })
+  @ApiOperation({ summary: '전체 보상 요청 조회 (ADMIN, OPERATOR, AUDITOR)' })
   @ApiQuery({ name: 'eventId', required: false, description: '이벤트 ID 필터' })
   @ApiQuery({
     name: 'status',
@@ -54,7 +58,7 @@ export class RewardRequestsController {
   }
 
   @Get('me')
-  @ApiOperation({ summary: '내 보상 요청 조회 (jwt인증 값으로로 조회)' })
+  @ApiOperation({ summary: '내 보상 요청 조회 (모든 유저 가능)' })
   async findMyRequests(@Request() req) {
     return this.service.findByUser(req.user.email);
   }

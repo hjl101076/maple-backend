@@ -67,7 +67,6 @@ export class RewardRequestsService {
     };
   }
 
-  // 관리자/운영자/감사자용 전체 조회 + 필터
   async findAllWithFilter(filter: { eventId?: string; status?: string }) {
     const query: any = {};
     if (filter.eventId) query.eventId = new Types.ObjectId(filter.eventId);
@@ -76,7 +75,6 @@ export class RewardRequestsService {
     return this.rewardRequestModel.find(query).populate('eventId rewardId');
   }
 
-  // 일반 유저 자신의 이력 조회
   async findByUser(userEmail: string) {
     return this.rewardRequestModel
       .find({ userEmail })

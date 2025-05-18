@@ -21,7 +21,7 @@ export class RewardsController {
   constructor(private readonly rewardsService: RewardsService) {}
 
   @Post()
-  @ApiOperation({ summary: '보상 등록 (관리자/운영자 전용)' })
+  @ApiOperation({ summary: '보상 등록 (ADMIN, OPERATOR 전용)' })
   async create(@Body() createRewardDto: CreateRewardDto, @Request() req) {
     const allowedRoles = ['ADMIN', 'OPERATOR'];
     if (!allowedRoles.includes(req.user.role)) {
@@ -31,14 +31,22 @@ export class RewardsController {
   }
 
   @Get()
-  @ApiOperation({ summary: '전체 보상 목록 조회' })
-  async findAll() {
+  @ApiOperation({ summary: '전체 보상 목록 조회 (권한자만)' })
+  async findAll(@Request() req) {
+    const allowedRoles = ['ADMIN', 'OPERATOR', 'AUDITOR'];
+    if (!allowedRoles.includes(req.user.role)) {
+      throw new ForbiddenException('접근 권한이 없습니다.');
+    }
     return this.rewardsService.findAll();
   }
 
   @Get(':name')
-  @ApiOperation({ summary: '보상 이름으로 상세 조회' })
-  async findManyByName(@Param('name') name: string) {
+  @ApiOperation({ summary: '보상 이름으로 상세 조회 (권한자만)' })
+  async findManyByName(@Param('name') name: string, @Request() req) {
+    const allowedRoles = ['ADMIN', 'OPERATOR', 'AUDITOR'];
+    if (!allowedRoles.includes(req.user.role)) {
+      throw new ForbiddenException('접근 권한이 없습니다.');
+    }
     return this.rewardsService.findManyByName(name);
   }
 }

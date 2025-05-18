@@ -12,12 +12,12 @@ export class LoginDto {
   password: string;
 
   @ApiProperty({
-    example: 'USER || ADMIN ||  OPERATOR',
-    description: '회원가입 시에만 사용 (USER | ADMIN | OPERATOR)',
+    example: 'USER || ADMIN ||  OPERATOR || AUDITOR',
+    description: '회원가입 시에만 사용 (USER | ADMIN | OPERATOR | AUDITOR)',
     required: false,
   })
   @IsOptional()
   @IsString()
-  @IsIn(['USER', 'ADMIN', 'OPERATOR'])
+  @IsIn(['USER', 'ADMIN', 'OPERATOR', 'AUDITOR'])
   role?: string;
 }

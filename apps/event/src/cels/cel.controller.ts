@@ -21,23 +21,24 @@ export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
   @Post()
-  @ApiOperation({ summary: '이벤트 등록 (관리자만 가능)' })
+  @ApiOperation({ summary: '이벤트 등록 (ADMIN, OPERATOR만 가능)' })
   async create(@Body() dto: CreateEventDto, @Request() req) {
-    if (req.user.role !== 'ADMIN') {
-      throw new ForbiddenException('관리자만 이벤트를 등록할 수 있습니다.');
+    const allowedRoles = ['ADMIN', 'OPERATOR'];
+    if (!allowedRoles.includes(req.user.role)) {
+      throw new ForbiddenException('이벤트 등록 권한이 없습니다.');
     }
 
     return this.eventsService.create(dto);
   }
 
   @Get()
-  @ApiOperation({ summary: '전체 이벤트 목록 조회' })
+  @ApiOperation({ summary: '전체 이벤트 목록 조회 (모든 사용자 가능)' })
   async findAll() {
     return this.eventsService.findAll();
   }
 
   @Get(':id')
-  @ApiOperation({ summary: '이벤트 상세 조회' })
+  @ApiOperation({ summary: '이벤트 상세 조회 (모든 사용자 가능)' })
   async findOne(@Param('id') id: string) {
     return this.eventsService.findById(id);
   }
