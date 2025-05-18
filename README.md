@@ -38,13 +38,21 @@ yarn start:dev
 ## 프로젝트 구조
 
 maple-backend/
+
 ├── apps/
+
 │ ├── auth/ # 인증 서비스 (회원가입, 로그인, JWT 발급)
+
 │ │ ├── docker/ # Dockerfile, docker-compose 설정
+
 │ │ ├── .env # 환경 변수 설정
+
 │ └── event/ # 이벤트 서비스 (이벤트, 보상, 유저 요청)
+
 │ │ ├── docker/ # Dockerfile, docker-compose 설정
+
 │ │ ├── .env # 환경 변수 설정
+
 ├── libs/ # 공통 모듈 및 유틸리티
 
 └── README.md # 프로젝트 설명서 (본 파일)
