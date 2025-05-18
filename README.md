@@ -15,15 +15,15 @@ cd maple-backend
 
 yarn install
 
-# 3. 환경 변수 파일 생성(git 파일 첨부 )
+# auth 서비스
 
-cp .env.example .env # 또는 수동 생성
+cd apps/auth
+yarn start:dev
 
-.env 파일 내용 예시:
-PORT=3001
-MONGO_URI=mongodb://localhost:27017/event
-JWT_SECRET=supersecret
-JWT_EXPIRES_IN=3600s
+# event 서비스
+
+cd apps/event
+yarn start:dev
 
 ## 기술 스택
 
@@ -37,17 +37,7 @@ JWT_EXPIRES_IN=3600s
 
 ## 프로젝트 구조
 
-maple-backend/
-├── apps/
-│ ├── auth/ # 인증 서비스 (회원가입, 로그인, JWT 발급)
-│ │ ├── docker/ # Dockerfile, docker-compose 설정
-│ └── event/ # 이벤트 서비스 (이벤트, 보상, 유저 요청)
-│ │ ├── docker/ # Dockerfile, docker-compose 설정
-├── libs/ # 공통 모듈 및 유틸리티
-├── .env # 환경 변수 설정
-└── README.md # 프로젝트 설명서 (본 파일)
-
----
+## <pre> `bash maple-backend/ ├── apps/ │ ├── auth/ # 인증 서비스 (회원가입, 로그인, JWT 발급) │ │ ├── docker/ # Dockerfile, docker-compose 설정 │ └── event/ # 이벤트 서비스 (이벤트, 보상, 유저 요청) │ ├── docker/ # Dockerfile, docker-compose 설정 ├── libs/ # 공통 모듈 및 유틸리티 ├── .env # 환경 변수 설정 └── README.md # 프로젝트 설명서 (본 파일) ` </pre>
 
 ## 서비스 설명
 
