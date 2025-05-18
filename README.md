@@ -17,13 +17,11 @@ yarn install
 
 # auth 서비스
 
-cd apps/auth
-yarn start:dev
+yarn start auth
 
 # event 서비스
 
-cd apps/event
-yarn start:dev
+yarn start event
 
 ## 기술 스택
 
