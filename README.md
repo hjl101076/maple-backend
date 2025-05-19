@@ -44,6 +44,27 @@ yarn start auth
 
 yarn start event
 
+# AuthService 단위 테스트 항목 (추천 테스트 순서)
+
+1. 회원가입(register)
+
+- 비밀번호 해싱 후 사용자 등록 성공 케이스
+- 사용자 등록 실패 예외 처리 케이스
+
+2. 로그인(validateUser)
+
+- 이메일/비밀번호/역할 일치 시 정상 반환
+- 비밀번호 불일치 시 UnauthorizedException
+- 역할 불일치 시 예외 메시지 확인
+
+3. JWT 토큰 발급(login)
+
+- 유저 객체로 JWT 토큰 생성 반환
+
+4. 실행
+
+- npx jest apps/auth/src/auth.service.spec.ts
+
 ## 기술 스택
 
 - **NestJS** (Monorepo, MSA 구조)
