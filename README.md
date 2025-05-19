@@ -2,7 +2,7 @@
 
 메이플스토리 이벤트 보상 시스템 과제입니다.  
 NestJS 기반 Monorepo 구조로 Auth / Event 서비스를 분리하여 구축했습니다.  
-JWT 인증, MongoDB, Swagger, Docker 기반으로 구성했습니다.
+JWT 인증, MongoDB, Swagger, Docker 기반으로 설계 및 단위 테스트까지 구현했습니다.
 
 ## 설계 및 구현 설명
 
@@ -27,14 +27,26 @@ JWT 인증, MongoDB, Swagger, Docker 기반으로 구성했습니다.
 
 ---
 
-# 1. 저장소 클론
+## 실행 방법
 
-git clone https://github.com/hjl101076/maple-backend.git
-cd maple-backend
+### 1. 환경 변수 설정
+
+# .env 파일 예시
+
+PORT=3002
+MONGO_URI=mongodb://localhost:27017/event
+JWT_SECRET=supersecret
+JWT_EXPIRES_IN=3600s
 
 # 2. 의존성 설치
 
 yarn install
+
+# [옵션 A] Docker로 전체 실행 (권장)
+
+docker-compose up --build
+
+# [옵션 B] 로컬 Nest 서비스 직접 실행
 
 # auth 서비스
 
@@ -44,27 +56,6 @@ yarn start auth
 
 yarn start event
 
-# AuthService 단위 테스트 항목 (추천 테스트 순서)
-
-1. 회원가입(register)
-
-- 비밀번호 해싱 후 사용자 등록 성공 케이스
-- 사용자 등록 실패 예외 처리 케이스
-
-2. 로그인(validateUser)
-
-- 이메일/비밀번호/역할 일치 시 정상 반환
-- 비밀번호 불일치 시 UnauthorizedException
-- 역할 불일치 시 예외 메시지 확인
-
-3. JWT 토큰 발급(login)
-
-- 유저 객체로 JWT 토큰 생성 반환
-
-4. 실행
-
-- npx jest apps/auth/src/auth.service.spec.ts
-
 ## 기술 스택
 
 - **NestJS** (Monorepo, MSA 구조)
@@ -72,6 +63,11 @@ yarn start event
 - **JWT 인증** (Passport, Guard)
 - **Swagger** (API 문서 자동화)
 - **Docker / docker-compose** (배포 환경)
+
+### 3. Swagger 문서 주소
+
+- Auth 서비스: http://localhost:3001/api
+- Event 서비스: http://localhost:3002/api
 
 ---
 
@@ -115,26 +111,6 @@ maple-backend/
 - JWT 토큰 발급 및 검증 전략
 
 ---
-
-## 실행 방법
-
-### 1. 환경 변수 설정
-
-# .env 파일 예시
-
-PORT=3002
-MONGO_URI=mongodb://localhost:27017/event
-JWT_SECRET=supersecret
-JWT_EXPIRES_IN=3600s
-
-### 2. Docker 실행
-
-docker-compose up --build
-
-### 3. Swagger 문서 주소
-
-- Auth 서비스: http://localhost:3001/api
-- Event 서비스: http://localhost:3002/api
 
 ## API 사용 흐름 예시
 
@@ -211,3 +187,49 @@ Authorization: Bearer <access_token>
 
 GET /reward-requests?eventName=출석 이벤트&status=SUCCESS
 Authorization: Bearer <access_token>
+
+---
+
+# AuthService 단위 테스트 항목
+
+1. 회원가입(register)
+
+- 비밀번호 해싱 후 사용자 등록 성공 케이스
+- 사용자 등록 실패 예외 처리 케이스
+
+2. 로그인(validateUser)
+
+- 이메일/비밀번호/역할 일치 시 정상 반환
+- 비밀번호 불일치 시 UnauthorizedException
+- 역할 불일치 시 예외 메시지 확인
+
+3. JWT 토큰 발급(login)
+
+- 유저 객체로 JWT 토큰 생성 반환
+
+4. 실행
+
+- npx jest apps/auth/src/auth.service.spec.ts
+
+# RewardService 단위 테스트 항목
+
+1. 보상 등록 (rewards)
+
+- ADMIN, OPERATOR 역할인 경우 등록 성공
+- USER 역할일 경우 ForbiddenException 발생
+
+2. 전체 보상 목록 조회 (rewards)
+
+- ADMIN, AUDITOR는 목록 조회 가능
+- USER는 ForbiddenException 발생
+
+3. 보상 이름으로 조회 (/rewards/:name)
+
+- ADMIN, AUDITOR는 조회 가능
+- USER는 ForbiddenException 발생
+
+4. 실행
+
+- npx jest apps/event/src/rewards/rewards.controller.spec.ts
+
+---
