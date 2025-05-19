@@ -31,9 +31,9 @@ export class RewardsController {
   }
 
   @Get()
-  @ApiOperation({ summary: '전체 보상 목록 조회 (권한자만)' })
+  @ApiOperation({ summary: '전체 보상 목록 조회 (ADMIN, AUDITOR 전용)' })
   async findAll(@Request() req) {
-    const allowedRoles = ['ADMIN', 'OPERATOR', 'AUDITOR'];
+    const allowedRoles = ['ADMIN', 'AUDITOR'];
     if (!allowedRoles.includes(req.user.role)) {
       throw new ForbiddenException('접근 권한이 없습니다.');
     }
@@ -41,9 +41,9 @@ export class RewardsController {
   }
 
   @Get(':name')
-  @ApiOperation({ summary: '보상 이름으로 상세 조회 (권한자만)' })
+  @ApiOperation({ summary: '보상 이름으로 상세 조회 (ADMIN, AUDITOR 전용)' })
   async findManyByName(@Param('name') name: string, @Request() req) {
-    const allowedRoles = ['ADMIN', 'OPERATOR', 'AUDITOR'];
+    const allowedRoles = ['ADMIN', 'AUDITOR'];
     if (!allowedRoles.includes(req.user.role)) {
       throw new ForbiddenException('접근 권한이 없습니다.');
     }

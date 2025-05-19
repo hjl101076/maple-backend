@@ -10,10 +10,13 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async validateUser(email: string, password: string) {
+  async validateUser(email: string, password: string, role?: string) {
     const user = await this.usersService.findByEmail(email);
     if (user && (await bcrypt.compare(password, user.passwordHash))) {
       const { passwordHash, ...result } = user.toObject();
+      if (role && result.role !== role) {
+        throw new UnauthorizedException('요청한 역할과 일치하지 않습니다.');
+      }
       return result;
     }
     throw new UnauthorizedException('Invalid credentials');

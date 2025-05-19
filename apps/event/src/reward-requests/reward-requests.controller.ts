@@ -37,8 +37,12 @@ export class RewardRequestsController {
   }
 
   @Get()
-  @ApiOperation({ summary: '전체 보상 요청 조회 (ADMIN, OPERATOR, AUDITOR)' })
-  @ApiQuery({ name: 'eventId', required: false, description: '이벤트 ID 필터' })
+  @ApiOperation({ summary: '전체 보상 요청 조회 (ADMIN, AUDITOR)' })
+  @ApiQuery({
+    name: 'eventName',
+    required: false,
+    description: '이벤트 이름',
+  })
   @ApiQuery({
     name: 'status',
     required: false,
@@ -46,19 +50,21 @@ export class RewardRequestsController {
   })
   async findAll(
     @Request() req,
-    @Query('eventId') eventId?: string,
+    @Query('eventName') eventName?: string,
     @Query('status') status?: string,
   ) {
-    const allowedRoles = ['ADMIN', 'OPERATOR', 'AUDITOR'];
+    const allowedRoles = ['ADMIN', 'AUDITOR'];
     if (!allowedRoles.includes(req.user.role)) {
       throw new ForbiddenException('접근 권한이 없습니다.');
     }
 
-    return this.service.findAllWithFilter({ eventId, status });
+    return this.service.findAllWithFilter({ eventName, status });
   }
 
   @Get('me')
-  @ApiOperation({ summary: '내 보상 요청 조회 (모든 유저 가능)' })
+  @ApiOperation({
+    summary: '내 보상 요청 조회 (USER만 가능-관리자 보상 요청 X)',
+  })
   async findMyRequests(@Request() req) {
     return this.service.findByUser(req.user.email);
   }

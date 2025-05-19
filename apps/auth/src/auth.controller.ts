@@ -20,7 +20,11 @@ export class AuthController {
   @ApiOperation({ summary: '로그인 및 JWT 발급' })
   @ApiBody({ type: LoginDto })
   async login(@Body() body: LoginDto) {
-    const user = await this.authService.validateUser(body.email, body.password);
+    const user = await this.authService.validateUser(
+      body.email,
+      body.password,
+      body.role,
+    );
     return this.authService.login(user);
   }
 }

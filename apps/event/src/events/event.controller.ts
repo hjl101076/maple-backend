@@ -8,7 +8,7 @@ import {
   ForbiddenException,
   Param,
 } from '@nestjs/common';
-import { EventsService } from './cel.service';
+import { EventsService } from './event.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../../../common/guards/jwt-auth.guard';
@@ -37,9 +37,9 @@ export class EventsController {
     return this.eventsService.findAll();
   }
 
-  @Get(':id')
+  @Get(':name')
   @ApiOperation({ summary: '이벤트 상세 조회 (모든 사용자 가능)' })
-  async findOne(@Param('id') id: string) {
-    return this.eventsService.findById(id);
+  async findOne(@Param('name') name: string) {
+    return this.eventsService.findByName(name);
   }
 }

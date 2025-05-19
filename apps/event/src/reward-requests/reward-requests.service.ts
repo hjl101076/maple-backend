@@ -5,7 +5,7 @@ import { RewardRequest, RewardRequestDocument } from './reward-requests.schema';
 import { CreateRewardRequestDto } from './dto/reward-request.dto';
 import { RewardConditionService } from '../reward-condition/reward-condition.service';
 import { Reward, RewardDocument } from '../rewards/rewards.schema';
-import { Event, EventDocument } from '../cels/cel.schema';
+import { Event, EventDocument } from '../events/event.schema';
 
 @Injectable()
 export class RewardRequestsService {
@@ -67,17 +67,18 @@ export class RewardRequestsService {
     };
   }
 
-  async findAllWithFilter(filter: { eventId?: string; status?: string }) {
+  async findAllWithFilter(filter: { eventName?: string; status?: string }) {
     const query: any = {};
-    if (filter.eventId) query.eventId = new Types.ObjectId(filter.eventId);
-    if (filter.status) query.status = filter.status;
-
-    return this.rewardRequestModel.find(query).populate('eventId rewardId');
+    if (filter.eventName) {
+      query.eventName = { $regex: filter.eventName, $options: 'i' };
+    }
+    if (filter.status) {
+      query.status = filter.status;
+    }
+    return this.rewardRequestModel.find(query);
   }
 
   async findByUser(userEmail: string) {
-    return this.rewardRequestModel
-      .find({ userEmail })
-      .populate('eventId rewardId');
+    return this.rewardRequestModel.find({ userEmail });
   }
 }

@@ -7,7 +7,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Reward, RewardDocument } from './rewards.schema';
 import { CreateRewardDto } from './dto/create-reward.dto';
-import { Event, EventDocument } from '../cels/cel.schema';
+import { Event, EventDocument } from '../events/event.schema';
 
 @Injectable()
 export class RewardsService {

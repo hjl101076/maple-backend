@@ -3,7 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Reward, RewardSchema } from './rewards.schema';
 import { RewardsService } from './rewards.service';
 import { RewardsController } from './rewards.controller';
-import { Event, EventSchema } from '../cels/cel.schema';
+import { Event, EventSchema } from '../events/event.schema';
 
 @Module({
   imports: [

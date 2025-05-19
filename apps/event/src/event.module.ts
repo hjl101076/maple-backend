@@ -3,7 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { EventsModule } from './cels/cel.module';
+import { EventsModule } from './events/event.module';
 import { RewardsModule } from './rewards/rewards.module';
 import { RewardRequestsModule } from './reward-requests/reward-requests.module';
 import { JwtStrategy } from '../../../common/strategies/jwt.strategy';

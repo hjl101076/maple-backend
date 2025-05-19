@@ -20,7 +20,7 @@ export class RewardConditionController {
   constructor(private readonly service: RewardConditionService) {}
 
   @Post()
-  @ApiOperation({ summary: '조건 결과 등록 (관리자·운영자만)' })
+  @ApiOperation({ summary: 'USER 보상 결과 등록 (ADMIN 전용)' })
   @ApiBody({
     schema: {
       example: {
@@ -35,9 +35,9 @@ export class RewardConditionController {
     body: { userEmail: string; rewardName: string; isSatisfied: boolean },
     @Request() req,
   ) {
-    const allowedRoles = ['ADMIN', 'OPERATOR'];
+    const allowedRoles = ['ADMIN'];
     if (!allowedRoles.includes(req.user.role)) {
-      throw new ForbiddenException('관리자 또는 운영자만 등록할 수 있습니다.');
+      throw new ForbiddenException('관리자만 등록할 수 있습니다.');
     }
     return this.service.setConditionStatus(
       body.userEmail,
@@ -47,9 +47,9 @@ export class RewardConditionController {
   }
 
   @Get('all')
-  @ApiOperation({ summary: '전체 조건 상태 조회 (관리자·감시자만)' })
+  @ApiOperation({ summary: '전체 보상 결과 조회 (ADMIN 전용)' })
   async getAll(@Request() req) {
-    const allowedRoles = ['ADMIN', 'AUDITOR'];
+    const allowedRoles = ['ADMIN'];
     if (!allowedRoles.includes(req.user.role)) {
       throw new ForbiddenException('접근 권한이 없습니다.');
     }
