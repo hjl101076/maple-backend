@@ -42,7 +42,7 @@ JWT_EXPIRES_IN=3600s
 
 yarn install
 
-# [옵션 A] Docker로 전체 실행 (권장)
+# [옵션 A] Docker로 전체 실행
 
 docker-compose up --build
 
